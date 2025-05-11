@@ -1,0 +1,947 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Movie App API",
+        "description": "Tài liệu API cho hệ thống đặt vé xem phim",
+        "contact": {
+            "email": "youremail@example.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "paths": {
+        "/api/ve": {
+            "post": {
+                "tags": [
+                    "Đặt vé"
+                ],
+                "summary": "Đặt vé xem phim",
+                "description": "API này dùng để đặt vé bao gồm: ghế, loại vé, dịch vụ ăn uống và tính tổng tiền.",
+                "operationId": "d6200273547167341660bac78c86ec27",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "ma_nguoi_dung",
+                                    "ma_sc",
+                                    "tong_tien",
+                                    "loai_ve",
+                                    "ghe",
+                                    "ngay_dat"
+                                ],
+                                "properties": {
+                                    "ma_nguoi_dung": {
+                                        "type": "string",
+                                        "example": "ND001"
+                                    },
+                                    "ma_sc": {
+                                        "type": "string",
+                                        "example": "SC002"
+                                    },
+                                    "tong_tien": {
+                                        "type": "string",
+                                        "example": "150000"
+                                    },
+                                    "loai_ve": {
+                                        "type": "string",
+                                        "example": "LV01:1,LV02:2"
+                                    },
+                                    "ghe": {
+                                        "type": "string",
+                                        "example": "G01,G02,G03"
+                                    },
+                                    "ngay_dat": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-04-12"
+                                    },
+                                    "bap_nuoc": {
+                                        "type": "string",
+                                        "example": "DV01:1,DV02:2",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Đặt vé thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "ma_ve": {
+                                            "type": "string",
+                                            "example": "VE1712900153123"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi xử lý",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lỗi khi đặt vé!"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Chi tiết lỗi từ server"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/dichvuanuong": {
+            "get": {
+                "tags": [
+                    "Dịch vụ ăn uống"
+                ],
+                "summary": "Lấy danh sách các dịch vụ ăn uống",
+                "operationId": "683e019bb4fcc41c0ba3839ee72bed00",
+                "responses": {
+                    "200": {
+                        "description": "Danh sách dịch vụ ăn uống",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "ten_dv": {
+                                                "type": "string",
+                                                "example": "Combo bắp + nước"
+                                            },
+                                            "gia_tien": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 45000
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/loaive": {
+            "get": {
+                "tags": [
+                    "Loại vé"
+                ],
+                "summary": "Lấy danh sách các loại vé",
+                "operationId": "de7bb287089cb86a60e53a9eb671ceaf",
+                "responses": {
+                    "200": {
+                        "description": "Danh sách loại vé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "ten_loai_ve": {
+                                                "type": "string",
+                                                "example": "Vé người lớn"
+                                            },
+                                            "gia_ve": {
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 70000
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/create-payment": {
+            "post": {
+                "tags": [
+                    "Thanh toán MoMo"
+                ],
+                "summary": "Tạo yêu cầu thanh toán MoMo",
+                "operationId": "2472906c5b05f1e508ef231bf8b53897",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "amount",
+                                    "orderId"
+                                ],
+                                "properties": {
+                                    "amount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100000
+                                    },
+                                    "orderId": {
+                                        "type": "string",
+                                        "example": "VE123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Thành công, trả về thông tin thanh toán",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Payment processed successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi trong việc tạo yêu cầu thanh toán",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Không thể tạo yêu cầu thanh toán"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/callback": {
+            "post": {
+                "tags": [
+                    "Thanh toán MoMo"
+                ],
+                "summary": "Callback MoMo khi thanh toán thành công hoặc thất bại",
+                "operationId": "ea517113726a80afbbded65a03fd10b9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "resultCode",
+                                    "orderId"
+                                ],
+                                "properties": {
+                                    "resultCode": {
+                                        "type": "string",
+                                        "example": "0"
+                                    },
+                                    "orderId": {
+                                        "type": "string",
+                                        "example": "VE123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Thanh toán thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Payment processed successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Thanh toán thất bại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "fail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/checkTrasaction": {
+            "post": {
+                "tags": [
+                    "Thanh toán MoMo"
+                ],
+                "summary": "Thông báo IPN từ MoMo về trạng thái thanh toán",
+                "operationId": "7dd1fc5a1703261cbe00955d9c509f0e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "orderId"
+                                ],
+                                "properties": {
+                                    "orderId": {
+                                        "type": "string",
+                                        "example": "VE123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Thanh toán đã được xác nhận",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Payment processed successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Thanh toán không thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "fail"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Payment failed"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Không thể kiểm tra trạng thái giao dịch",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unable to check transaction status"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/phim": {
+            "get": {
+                "tags": [
+                    "Phim"
+                ],
+                "summary": "Lấy danh sách phim",
+                "description": "API này dùng để lấy danh sách tất cả các phim có sẵn.",
+                "operationId": "31dd8ed16bb2a500d17b668e139da6d8",
+                "responses": {
+                    "200": {
+                        "description": "Danh sách phim",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "ma_phim": {
+                                                "type": "string",
+                                                "example": "PH001"
+                                            },
+                                            "ten_phim": {
+                                                "type": "string",
+                                                "example": "Phim 1"
+                                            },
+                                            "mo_ta": {
+                                                "type": "string",
+                                                "example": "Mô tả phim 1"
+                                            },
+                                            "ngay_cong_chieu": {
+                                                "type": "string",
+                                                "format": "date",
+                                                "example": "2025-04-12"
+                                            },
+                                            "the_loai": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "Hành động"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/phim/{ma_phim}": {
+            "get": {
+                "tags": [
+                    "Phim"
+                ],
+                "summary": "Lấy thông tin phim theo mã",
+                "description": "API này dùng để lấy thông tin chi tiết của một phim dựa trên mã phim.",
+                "operationId": "7299464f928292349f2dc51eab28c1c2",
+                "parameters": [
+                    {
+                        "name": "ma_phim",
+                        "in": "path",
+                        "description": "Mã phim cần tìm",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thông tin phim chi tiết",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "ma_phim": {
+                                            "type": "string",
+                                            "example": "PH001"
+                                        },
+                                        "ten_phim": {
+                                            "type": "string",
+                                            "example": "Phim 1"
+                                        },
+                                        "mo_ta": {
+                                            "type": "string",
+                                            "example": "Mô tả phim 1"
+                                        },
+                                        "ngay_cong_chieu": {
+                                            "type": "string",
+                                            "format": "date",
+                                            "example": "2025-04-12"
+                                        },
+                                        "the_loai": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "Hành động"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Phim không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Phim không tồn tại"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/phong/dsghe/{ma_phong}": {
+            "get": {
+                "tags": [
+                    "Phòng Chiếu"
+                ],
+                "summary": "Lấy danh sách ghế theo phòng chiếu",
+                "description": "API này dùng để lấy danh sách các ghế trong một phòng chiếu cụ thể.",
+                "operationId": "a69c4d9ad463466bcaede452fb5df872",
+                "parameters": [
+                    {
+                        "name": "ma_phong",
+                        "in": "path",
+                        "description": "Mã phòng chiếu cần lấy ghế",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Danh sách ghế trong phòng chiếu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "ma_ghe": {
+                                                "type": "string",
+                                                "example": "G01"
+                                            },
+                                            "so_ghe": {
+                                                "type": "string",
+                                                "example": "A1"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Không tìm thấy ghế nào trong phòng chiếu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Không tìm thấy ghế nào"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/phong/{ma_phong}": {
+            "get": {
+                "tags": [
+                    "Phòng Chiếu"
+                ],
+                "summary": "Lấy thông tin phòng chiếu theo mã",
+                "description": "API này dùng để lấy thông tin chi tiết một phòng chiếu theo mã phòng.",
+                "operationId": "f64f7fe4de224517e654e6822e0c6cb2",
+                "parameters": [
+                    {
+                        "name": "ma_phong",
+                        "in": "path",
+                        "description": "Mã phòng chiếu cần tìm",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thông tin phòng chiếu",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "ma_phong": {
+                                            "type": "string",
+                                            "example": "PC001"
+                                        },
+                                        "ten_phong": {
+                                            "type": "string",
+                                            "example": "Phòng Chiếu 1"
+                                        },
+                                        "so_ghe": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "mo_ta": {
+                                            "type": "string",
+                                            "example": "Phòng chiếu hiện đại với ghế ngồi thoải mái"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Phòng chiếu không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Phòng chiếu không tồn tại"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rap/{ma_rap}": {
+            "get": {
+                "tags": [
+                    "Rạp chiếu phim"
+                ],
+                "summary": "Lấy thông tin rạp chiếu phim",
+                "description": "API này dùng để lấy thông tin chi tiết của một rạp chiếu phim theo ID.",
+                "operationId": "288dc31faf3ca073cc1b79008f976225",
+                "parameters": [
+                    {
+                        "name": "ma_rap",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "RP001"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lấy thông tin rạp chiếu phim thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "RP001"
+                                        },
+                                        "ten": {
+                                            "type": "string",
+                                            "example": "Rạp Phim ABC"
+                                        },
+                                        "dia_chi": {
+                                            "type": "string",
+                                            "example": "123 Đường ABC, Quận 1, TP.HCM"
+                                        },
+                                        "so_phong_chieu": {
+                                            "type": "integer",
+                                            "example": 5
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rạp chiếu phim không tồn tại",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Không tìm thấy rạp chiếu phim!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/suatchieu/phim/{ma_phim}": {
+            "get": {
+                "tags": [
+                    "Suất Chiếu"
+                ],
+                "summary": "Lấy danh sách suất chiếu theo mã phim",
+                "description": "API này dùng để lấy tất cả suất chiếu cho một phim.",
+                "operationId": "2a0249d35ac0b9a512c4965c180546c6",
+                "parameters": [
+                    {
+                        "name": "ma_phim",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "PH001"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Danh sách suất chiếu của phim",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "ma_rap": {
+                                            "type": "string",
+                                            "example": "RP001"
+                                        },
+                                        "ten_rap": {
+                                            "type": "string",
+                                            "example": "Rạp Phim ABC"
+                                        },
+                                        "dia_chi": {
+                                            "type": "string",
+                                            "example": "123 Đường ABC, Quận 1, TP.HCM"
+                                        },
+                                        "suat_chieu": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "ma_suat_chieu": {
+                                                        "type": "string",
+                                                        "example": "SC001"
+                                                    },
+                                                    "ma_phong": {
+                                                        "type": "string",
+                                                        "example": "P001"
+                                                    },
+                                                    "phong": {
+                                                        "type": "string",
+                                                        "example": "Phòng 1"
+                                                    },
+                                                    "thoi_gian_bd": {
+                                                        "type": "string",
+                                                        "example": "10:00"
+                                                    },
+                                                    "ngay_chieu": {
+                                                        "type": "string",
+                                                        "example": "12-04-2025"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Không có suất chiếu cho phim này",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Không có suất chiếu cho phim này"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Phim": {
+                "title": "Phim",
+                "description": "Thông tin về phim",
+                "properties": {
+                    "ma_phim": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "ten_phim": {
+                        "type": "string",
+                        "example": "Avengers: Endgame"
+                    },
+                    "mo_ta": {
+                        "type": "string",
+                        "example": "Phim siêu anh hùng"
+                    },
+                    "thoi_luong": {
+                        "type": "integer",
+                        "example": 180
+                    },
+                    "ngay_phat_hanh": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2019-04-26"
+                    },
+                    "anh": {
+                        "type": "string",
+                        "example": "https://example.com/image.jpg"
+                    },
+                    "hinh_thuc_chieu": {
+                        "type": "string",
+                        "example": "2D, 3D, IMAX"
+                    },
+                    "dao_dien": {
+                        "type": "string",
+                        "example": "Anthony Russo, Joe Russo"
+                    },
+                    "dien_vien": {
+                        "type": "string",
+                        "example": "Robert Downey Jr., Chris Evans"
+                    },
+                    "trang_thai": {
+                        "type": "string",
+                        "example": "Đang chiếu"
+                    },
+                    "do_tuoi": {
+                        "type": "string",
+                        "example": "13+"
+                    },
+                    "quoc_gia": {
+                        "type": "string",
+                        "example": "Mỹ"
+                    },
+                    "ngay_tao_phim": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T00:00:00Z"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Đặt vé",
+            "description": "Đặt vé"
+        },
+        {
+            "name": "Dịch vụ ăn uống",
+            "description": "Dịch vụ ăn uống"
+        },
+        {
+            "name": "Loại vé",
+            "description": "Loại vé"
+        },
+        {
+            "name": "Thanh toán MoMo",
+            "description": "Thanh toán MoMo"
+        },
+        {
+            "name": "Phim",
+            "description": "Phim"
+        },
+        {
+            "name": "Phòng Chiếu",
+            "description": "Phòng Chiếu"
+        },
+        {
+            "name": "Rạp chiếu phim",
+            "description": "Rạp chiếu phim"
+        },
+        {
+            "name": "Suất Chiếu",
+            "description": "Suất Chiếu"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: movie-api
+    env: docker
+    plan: free
+    branch: main
+    dockerfilePath: Dockerfile
+    buildCommand: ""
+    startCommand: php artisan serve --host=0.0.0.0 --port=8000
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        value: base64:IaH6y4rWaqXxdinzLuEw1VFHukYwprqXMg+klwaG1fQ=
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: datvexemphim-traocongquynh-b209.h.aivencloud.com
+      - key: DB_PORT
+        value: 16861
+      - key: DB_DATABASE
+        value: datvexemphim
+      - key: DB_USERNAME
+        value: avnadmin
+      - key: DB_PASSWORD
+        fromSecret: DB_PASSWORD
