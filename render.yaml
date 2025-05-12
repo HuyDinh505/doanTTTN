@@ -11,15 +11,15 @@ services:
       - key: APP_ENV
         value: production
       - key: APP_KEY
-        value: base64:IaH6y4rWaqXxdinzLuEw1VFHukYwprqXMg+klwaG1fQ=
+        value: base64:W+Ce/StggT1lmwwqKKud6jsH0OP9f0hifPQj8JcT1s0=
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        value: datvexemphim-traocongquynh-b209.h.aivencloud.com
+        value: datvexemphim-zhuy105503-fbff.h.aivencloud.com
       - key: DB_PORT
-        value: 16861
+        value: 21580
       - key: DB_DATABASE
-        value: datvexemphim
+        value: datvexemphim1
       - key: DB_USERNAME
         value: avnadmin
       - key: DB_PASSWORD
