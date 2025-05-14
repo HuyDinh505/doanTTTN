@@ -45,7 +45,8 @@ class VaiTroQuyenSeeder extends Seeder
             Quyen::THEM_RAP => 'Thêm rạp mới',
             Quyen::SUA_RAP => 'Sửa thông tin rạp',
             Quyen::XOA_RAP => 'Xóa rạp',
-            Quyen::XEM_THONG_KE => 'Xem thống kê'
+            Quyen::XEM_THONG_KE => 'Xem thống kê',
+            'xem_phong_chieu' => 'Xem thông tin phòng chiếu'
         ];
 
         foreach ($quyens as $tenQuyen => $moTa) {

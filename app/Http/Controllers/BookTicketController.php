@@ -11,6 +11,7 @@ use App\Models\VeDat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BookTicketController extends Controller
 {
@@ -78,10 +79,13 @@ class BookTicketController extends Controller
             $datve->ma_nguoi_dung = $request->input('ma_nguoi_dung');
             $datve->ma_suat_chieu = $request->input('ma_sc');
 
-            $number = str_replace(['.', ' VNĐ'], '', (string) $request->tong_tien);
-            $number1 = str_replace(',', '', $number);
-            $datve->tong_gia_tien = $number1;
-
+            // $number = str_replace(['.', ' VNĐ'], '', (string) $request->tong_tien);
+            // $number1 = str_replace(',', '', $number);
+            // $datve->tong_gia_tien = $number1;
+            // $datve->tong_gia_tien = (int) $request->tong_tien;
+            $datve->tong_gia_tien = (float) $request->tong_tien;
+            // Log::info('TONG_TIEN_FE', ['tong_tien' => $request->tong_tien]);
+            // Log::info('TONG_TIEN_DB', ['tong_gia_tien' => $datve->tong_gia_tien]);
             $tong_so_ve = 0;
             $loaive = explode(',', $request->input('loai_ve'));
             foreach ($loaive as $loai) {

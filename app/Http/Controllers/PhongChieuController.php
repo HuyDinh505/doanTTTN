@@ -166,11 +166,18 @@ class PhongChieuController extends Controller
             $user = Auth::user();
             $query = PhongChieu::with(['rap_phim', 'ghe_ngois']);
 
-            if ($user->ma_vai_tro === 2) {
+            // Chỉ giới hạn quyền truy cập cho quản lý
+            if ($user && $user->ma_vai_tro === 2) {
                 $query->where('ma_rap', $user->ma_rap);
             }
 
             $phongChieu = $query->findOrFail($ma_phong);
+
+            // Kiểm tra trạng thái phòng chiếu
+            if (!$phongChieu->isActive()) {
+                return response()->json(['message' => 'Phòng chiếu đang bảo trì'], 403);
+            }
+
             return response()->json($phongChieu);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Phòng chiếu không tồn tại'], 404);

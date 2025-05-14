@@ -25,6 +25,7 @@ use App\Http\Controllers\VaiTroController;
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/admin/login', [AuthController::class, 'adminLogin'])->name('admin.login');
+Route::post('/callback', [MoMoPaymentController::class, 'callback']);
 
 // Public movie routes
 Route::get('/phim', [PhimController::class, 'index']); // List all movies
@@ -39,7 +40,7 @@ Route::get('/phong/dsghe/{ma_phong}', [PhongChieuController::class, 'getGhebyPho
 Route::get('/phong/{ma_phong}', [PhongChieuController::class, 'show']); // Get room details
 Route::resource('loaive', LoaiVeController::class);
 Route::resource('dichvuanuong', DichVuAnUongController::class);
-
+// Route::resource('ve', BookTicketController::class);
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // User profile routes
@@ -111,6 +112,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/thong-ke/doanh-thu', [DashboardController::class, 'getRevenueByDateRange']);
         Route::get('/thong-ke/phim', [DashboardController::class, 'getMovieStatistics']);
         Route::get('/thong-ke/tong-quan', [DashboardController::class, 'getStatistics']);
+
+        Route::get('/manager/ve', [VeController::class, 'index']);
+        Route::get('/manager/ve/{id}', [VeController::class, 'show']);
+        Route::put('/manager/ve/{id}', [VeController::class, 'updateTrangThai']);
     });
 
     // Staff routes
@@ -139,8 +144,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // Booking and payment
         Route::resource('ve', BookTicketController::class);
         Route::post('create-payment', [MoMoPaymentController::class, 'createPayment']);
-        Route::post('callback', [MoMoPaymentController::class, 'callback']);
         Route::post('checkTrasaction', [MoMoPaymentController::class, 'ipn']);
+        Route::put('/user/{id}', [UserController::class, 'update']); // Cập nhật tài khoản
+        Route::get('/user/{id}/tickets', [VeController::class, 'getTicketsByUser']); // Lấy vé của tôi
+        Route::put('/tickets/{ma_ve}/cancel', [VeController::class, 'cancelTicket']); // Hủy vé
     });
 
     // Movie routes

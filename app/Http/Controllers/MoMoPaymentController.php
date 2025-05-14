@@ -6,9 +6,9 @@ use App\Models\DatVe;
 use Carbon\Carbon;
 use Date;
 use GuzzleHttp\Client;
-use Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
-use Log;
 
 class MoMoPaymentController extends Controller
 {
@@ -53,9 +53,9 @@ class MoMoPaymentController extends Controller
         $orderInfo = 'pay with MoMo';
         $partnerCode = 'MOMO';
         // $redirectUrl = 'https://datvexemphim-psi.vercel.app/';
-        // $ipnUrl = 'https://be-da-web-nam4.onrender.com/api/callback';
+        $ipnUrl = 'https://be-web-datve-1.onrender.com/api/callback';
         $redirectUrl = 'http://localhost:5173/';
-        $ipnUrl = 'https://1c92-115-76-51-135.ngrok-free.app/api/callback';
+        // $ipnUrl = 'https://9186-2402-800-637c-8ca8-21ca-af35-f43c-4aff.ngrok-free.app/api/callback';
         $requestType = "payWithMethod";
         $amount = $request->amount;
         $orderId = $request->orderId;
@@ -85,7 +85,8 @@ class MoMoPaymentController extends Controller
         ];
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('https://test-payment.momo.vn/v2/gateway/api/create', $requestBody);
+        ])->withOptions(['verify' => false]) // Thêm dòng này!
+        ->post('https://test-payment.momo.vn/v2/gateway/api/create', $requestBody);
 
         if ($response->successful()) {
             return response()->json($response->json());
@@ -129,6 +130,7 @@ class MoMoPaymentController extends Controller
 
     public function callback(Request $request)
     {
+        // Log::info('MoMo callback', $request->all());
         if ($request->resultCode == '0') {
             $orderId = $request->orderId;
 

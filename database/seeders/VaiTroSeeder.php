@@ -53,7 +53,8 @@ class VaiTroSeeder extends Seeder
 
         $khachHang->quyens()->attach(
             Quyen::whereIn('ten_quyen', [
-                'dat_ve'
+                'dat_ve',
+                'xem_phong_chieu'
             ])->get()
         );
     }
