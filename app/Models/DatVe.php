@@ -21,7 +21,7 @@ class DatVe extends Model
     protected $casts = [
         'ma_nguoi_dung' => 'int',
         'ma_suat_chieu' => 'int',
-        'tong_gia_tien' => 'float',
+        'tong_gia_tien' => 'decimal:2',
         'tong_so_ve' => 'int',
         'ngay_dat_ve' => 'datetime'
     ];

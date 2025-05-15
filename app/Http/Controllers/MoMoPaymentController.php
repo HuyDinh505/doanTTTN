@@ -52,10 +52,10 @@ class MoMoPaymentController extends Controller
     {
         $orderInfo = 'pay with MoMo';
         $partnerCode = 'MOMO';
-        $redirectUrl = 'https://fe-webdatve.vercel.app/';
-        $ipnUrl = 'https://be-web-datve-1.onrender.com/api/callback';
-        // $redirectUrl = 'http://localhost:5173/';
-        // $ipnUrl = 'https://9186-2402-800-637c-8ca8-21ca-af35-f43c-4aff.ngrok-free.app/api/callback';
+        // $redirectUrl = 'https://fe-webdatve.vercel.app/';
+        // $ipnUrl = 'https://be-web-datve-1.onrender.com/api/callback';
+        $redirectUrl = 'http://localhost:5173/';
+        $ipnUrl = 'https://c295-2402-800-637c-8ca8-5d93-bbc4-98ca-5e71.ngrok-free.app/api/callback';
         $requestType = "payWithMethod";
         $amount = $request->amount;
         $orderId = $request->orderId;

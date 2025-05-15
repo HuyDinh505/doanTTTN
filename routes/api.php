@@ -116,6 +116,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/manager/ve', [VeController::class, 'index']);
         Route::get('/manager/ve/{id}', [VeController::class, 'show']);
         Route::put('/manager/ve/{id}', [VeController::class, 'updateTrangThai']);
+
+        Route::post('/manager/phim', [PhimController::class, 'store']);
+        Route::put('/manager/phim/{id}', [PhimController::class, 'update']);
+        Route::delete('/manager/phim/{id}', [PhimController::class, 'destroy']);
     });
 
     // Staff routes

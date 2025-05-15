@@ -79,19 +79,30 @@ class BookTicketController extends Controller
             $datve->ma_nguoi_dung = $request->input('ma_nguoi_dung');
             $datve->ma_suat_chieu = $request->input('ma_sc');
 
-            // $number = str_replace(['.', ' VNĐ'], '', (string) $request->tong_tien);
-            // $number1 = str_replace(',', '', $number);
-            // $datve->tong_gia_tien = $number1;
-            // $datve->tong_gia_tien = (int) $request->tong_tien;
-            $datve->tong_gia_tien = (float) $request->tong_tien;
-            // Log::info('TONG_TIEN_FE', ['tong_tien' => $request->tong_tien]);
-            // Log::info('TONG_TIEN_DB', ['tong_gia_tien' => $datve->tong_gia_tien]);
+            // Xử lý tong_gia_tien
+            $tong_tien = str_replace(['.', ' VNĐ', ','], '', (string) $request->tong_tien);
+            $datve->tong_gia_tien = (float)$tong_tien;
+
+            // Log để debug
+            Log::info('TONG_TIEN_FE', ['tong_tien' => $request->tong_tien]);
+            Log::info('TONG_TIEN_DB', ['tong_gia_tien' => $datve->tong_gia_tien]);
+
             $tong_so_ve = 0;
             $loaive = explode(',', $request->input('loai_ve'));
+
+            // Log thông tin loại vé
+            Log::info('LOAI_VE_INFO', ['loai_ve' => $request->input('loai_ve')]);
+
             foreach ($loaive as $loai) {
                 $ve = explode(':', $loai);
                 if (isset($ve[1])) {
                     $tong_so_ve += (int) $ve[1];
+                    // Log thông tin từng loại vé
+                    Log::info('VE_DETAIL', [
+                        'ma_loai_ve' => $ve[0],
+                        'so_luong' => $ve[1],
+                        'tong_so_ve' => $tong_so_ve
+                    ]);
                 }
             }
 
@@ -111,6 +122,14 @@ class BookTicketController extends Controller
                 if (!$loai) {
                     throw new \Exception("Không tìm thấy loại vé: $maloaive");
                 }
+
+                // Log thông tin giá vé
+                Log::info('GIA_VE_INFO', [
+                    'ma_loai_ve' => $maloaive,
+                    'gia_ve' => $loai->gia_ve,
+                    'so_luong' => $soluong,
+                    'thanh_tien' => $soluong * $loai->gia_ve
+                ]);
 
                 // Create one VeDat record per ticket type
                 $gheForThisType = array_slice($gheId, $index, $soluong);
